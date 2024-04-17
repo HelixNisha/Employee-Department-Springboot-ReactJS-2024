@@ -28,13 +28,13 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     public Employee getEmployeeById(Long employeeId) {
         Optional<Employee> optional = repository.findById(employeeId);
-        Employee student = null;
+        Employee employee = null;
         if (optional.isPresent()) {
-            student = optional.get();
+            employee = optional.get();
         } else {
-            throw new RuntimeException("Student not Found for id:: " + employeeId);
+            throw new RuntimeException("Employee not Found for id:: " + employeeId);
         }
-        return student;
+        return employee;
     }
 
     @Override
@@ -44,11 +44,26 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     @Override
     public Employee updateEmployee(Long employeeId, Employee updatedEmployee) {
-        return null;
+
+        Optional<Employee> optional = repository.findById(employeeId);
+        if (optional.isPresent()) {
+            Employee existingEmployee = optional.get();
+            // Update employee details
+            existingEmployee.setFirstName(updatedEmployee.getFirstName());
+            existingEmployee.setLastName(updatedEmployee.getLastName());
+            existingEmployee.setEmail(updatedEmployee.getEmail());
+            // Update department information
+            existingEmployee.setDepartment(updatedEmployee.getDepartment());
+            // Save the updated employee
+            return repository.save(existingEmployee);
+        } else {
+            throw new RuntimeException("Employee not found for id: " + employeeId);
+        }
     }
 
     @Override
     public void deleteEmployee(Long employeeId) {
+
         this.repository.deleteById(employeeId);
     }
 }
