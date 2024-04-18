@@ -14,28 +14,6 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Autowired
     private EmployeeRepository repository;
 
-    public EmployeeServiceImpl(EmployeeRepository repository) {
-        this.repository = repository;
-    }
-
-    @Override
-    public Employee createEmployee(Employee employee) {
-        Employee savedEmployee = repository.save(employee);
-        // Return the saved employee
-        return savedEmployee;
-    }
-
-    @Override
-    public Employee getEmployeeById(Long employeeId) {
-        Optional<Employee> optional = repository.findById(employeeId);
-        Employee employee = null;
-        if (optional.isPresent()) {
-            employee = optional.get();
-        } else {
-            throw new RuntimeException("Employee not Found for id:: " + employeeId);
-        }
-        return employee;
-    }
 
     @Override
     public List<Employee> getAllEmployees() {
@@ -43,27 +21,26 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public Employee updateEmployee(Long employeeId, Employee updatedEmployee) {
+    public Employee getEmployeeById(Long id) {
+        Optional<Employee> employeeOptional = repository.findById(id);
+        return employeeOptional.orElse(null);
+    }
 
-        Optional<Employee> optional = repository.findById(employeeId);
-        if (optional.isPresent()) {
-            Employee existingEmployee = optional.get();
-            // Update employee details
-            existingEmployee.setFirstName(updatedEmployee.getFirstName());
-            existingEmployee.setLastName(updatedEmployee.getLastName());
-            existingEmployee.setEmail(updatedEmployee.getEmail());
-            // Update department information
-            existingEmployee.setDepartment(updatedEmployee.getDepartment());
-            // Save the updated employee
-            return repository.save(existingEmployee);
-        } else {
-            throw new RuntimeException("Employee not found for id: " + employeeId);
+    @Override
+    public void saveEmployee(Employee employee) {
+        repository.save(employee);
+    }
+
+    @Override
+    public void updateEmployee(Long id, Employee employee) {
+        if (repository.existsById(id)) {
+            employee.setId(id);
+            repository.save(employee);
         }
     }
 
     @Override
-    public void deleteEmployee(Long employeeId) {
-
-        this.repository.deleteById(employeeId);
+    public void deleteEmployee(Long id) {
+        repository.deleteById(id);
     }
 }

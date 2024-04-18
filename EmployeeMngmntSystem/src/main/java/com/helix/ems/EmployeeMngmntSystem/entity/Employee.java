@@ -1,6 +1,7 @@
 package com.helix.ems.EmployeeMngmntSystem.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 
 @Entity
@@ -13,12 +14,13 @@ public class Employee {
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
+    @NotBlank(message = "Email is required")
     @Column(name = "email_id", nullable = false, unique = true)
     private String email;
 
-    @ManyToOne
-    @JoinColumn(name = "department_id")
-    private Department department;
+//    @ManyToOne
+//    @JoinColumn(name = "department_id")
+//    private Department department;
 
 
     public Long getId() {
@@ -57,13 +59,13 @@ public class Employee {
         this.id = id;
     }
 
-    public Department getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(Department department) {
-        this.department = department;
-    }
+//    public Department getDepartment() {
+//        return department;
+//    }
+//
+//    public void setDepartment(Department department) {
+//        this.department = department;
+//    }
 
     public Employee() {
     }
@@ -81,11 +83,14 @@ public class Employee {
         this.email = email;
     }
 
-    public Employee(Long id, String firstName, String lastName, String email, Department department) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.department = department;
-    }
+//    public Employee(Long id, String firstName, String lastName, String email,
+//                   // Department department
+//    ) {
+//        this.id = id;
+//        this.firstName = firstName;
+//        this.lastName = lastName;
+//        this.email = email;
+//     //   this.department = department;
+//    }
+
 }
